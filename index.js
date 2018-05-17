@@ -1,37 +1,53 @@
-// 'use strict';
-// const uniqueString = require('unique-string');
-// const escapeStringRegexp = require('escape-string-regexp');
+//'use strict';
+const crypto = require('crypto');
+const escapeStringRegexp = require('escape-string-regexp');
 
-class Subsumex {
-// 	static parse(str, id) {
-// 		return (new Subsume(id)).parse(str);
-// 	}
-// 	constructor(id) {
-// 		if (id && (id.includes('@@[') || id.includes('##['))) {
-// 			throw new Error('`@@[` and `##[` cannot be used in the ID');
-// 		}
+function subsume(id) {
 
-// 		this.id = id ? id : uniqueString();
-// 		this.prefix = `@@[${this.id}]@@`;
-// 		this.postfix = `##[${this.id}]##`;
-// 		this.regex = new RegExp(escapeStringRegexp(this.prefix) + '([\\S\\s]*)' + escapeStringRegexp(this.postfix), 'g');
-// 	}
-// 	compose(str) {
-// 		return this.prefix + str + this.postfix;
-// 	}
-// 	parse(str) {
-// 		const ret = {};
+  function uniqueString() {
+    return crypto.randomBytes(Math.ceil(len / 2)).toString('hex').slice(0, len);
+  }
 
-// 		ret.rest = str.replace(this.regex, (m, p1) => {
-// 			if (p1) {
-// 				ret.data = p1;
-// 			}
+  if (id && (id.includes('@@[') || id.includes('##['))) {
+    throw new Error("'@@[' and '##[' cannot be used in the ID");
+  }
 
-// 			return '';
-// 		});
+  this.id = id ? id : uniqueString();
+  this.prefix = '@@[$' + this.id + ']@@';
+  this.postfix = '##[$' + this.id + ']##';
+  this.regex = new RegExp(escapeStringRegexp(this.prefix) + '([\\S\\s]*)' + escapeStringRegexp(this.postfix), 'g');
 
-// 		return ret;
-// 	}
 }
 
-module.exports = Subsumex;
+
+subsume.prototype.parse = function parse(str, id) {
+
+
+  function parse(str) {
+    const ret = {};
+
+    ret.rest = str.replace(this.regex, function (m, p1) {
+      if (p1) {
+        ret.data = p1;
+      }
+
+      return '';
+    });
+
+    return ret;
+  }
+
+
+  return (new Subsume(id)).parse(str);
+};
+
+
+subsume.prototype.compose = function compose(str) {
+
+  return this.prefix + str + this.postfix;
+
+}
+
+
+exports = module.exports = subsume;
+
