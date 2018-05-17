@@ -8,13 +8,16 @@ function subsume(id) {
     return crypto.randomBytes(Math.ceil(len / 2)).toString('hex').slice(0, len);
   }
 
-  if (id && (id.includes('@@[') || id.includes('##['))) {
-    throw new Error("'@@[' and '##[' cannot be used in the ID");
+  if (id && (id.includes('Qq-') || id.includes('Zz-'))) {
+    throw new Error("'Qq-' and 'Zz-' cannot be used in the ID");
   }
 
   this.id = id ? id : uniqueString();
-  this.prefix = '@@[$' + this.id + ']@@';
-  this.postfix = '##[$' + this.id + ']##';
+  this.prefix = 'Qq-' + this.id + '-qQ';
+  this.postfix = 'Zz-' + this.id + '-zZ';
+  // this.prefix = `Qq-${this.id}]@@`;
+  // this.postfix = `Zz-${this.id}]##`;
+
   this.regex = new RegExp(escapeStringRegexp(this.prefix) + '([\\S\\s]*)' + escapeStringRegexp(this.postfix), 'g');
 
 }
@@ -50,4 +53,3 @@ subsume.prototype.compose = function compose(str) {
 
 
 exports = module.exports = subsume;
-
