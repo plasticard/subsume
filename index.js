@@ -15,8 +15,6 @@ function subsume(id) {
   this.id = id ? id : uniqueString();
   this.prefix = 'Qq-' + this.id + '-qQ';
   this.postfix = 'Zz-' + this.id + '-zZ';
-  // this.prefix = `Qq-${this.id}]@@`;
-  // this.postfix = `Zz-${this.id}]##`;
 
   this.regex = new RegExp(escapeStringRegexp(this.prefix) + '([\\S\\s]*)' + escapeStringRegexp(this.postfix), 'g');
 
